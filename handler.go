@@ -81,7 +81,7 @@ func (s Sap) Delete(url string, handler func(c Ctx)) {
 /*
 Create a fileserver to handle static file serving
 */
-func (s Sap) FileServer(url string, path string) {
+func (s Sap) Static(url string, path string) {
 	var fs = http.FileServer(http.Dir(path))
 	router.Handle(url+"/", http.StripPrefix(url, fs))
 }
