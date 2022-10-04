@@ -1,5 +1,10 @@
 package sap
 
+import "net/http"
+
+/*
+Handle incoming Get requests at a given url
+*/
 func (s Sap) Get(url string, handler func(c Ctx)) {
 	if len(routes) == 0 {
 		routes = append(routes, Path{url, handler, nil, nil, nil})
@@ -16,6 +21,9 @@ func (s Sap) Get(url string, handler func(c Ctx)) {
 	}
 }
 
+/*
+Handle incoming Post requests at a given url
+*/
 func (s Sap) Post(url string, handler func(c Ctx)) {
 	if len(routes) == 0 {
 		routes = append(routes, Path{url, nil, handler, nil, nil})
@@ -32,6 +40,9 @@ func (s Sap) Post(url string, handler func(c Ctx)) {
 	}
 }
 
+/*
+Handle incoming Put requests at a given url
+*/
 func (s Sap) Put(url string, handler func(c Ctx)) {
 	if len(routes) == 0 {
 		routes = append(routes, Path{url, nil, nil, handler, nil})
@@ -48,6 +59,9 @@ func (s Sap) Put(url string, handler func(c Ctx)) {
 	}
 }
 
+/*
+Handle incoming Delete requests at a given url
+*/
 func (s Sap) Delete(url string, handler func(c Ctx)) {
 	if len(routes) == 0 {
 		routes = append(routes, Path{url, nil, nil, nil, handler})
@@ -62,4 +76,12 @@ func (s Sap) Delete(url string, handler func(c Ctx)) {
 			}
 		}
 	}
+}
+
+/*
+Create a fileserver to handle static file serving
+*/
+func (s Sap) FileServer(url string, path string) {
+	var fs = http.FileServer(http.Dir(path))
+	router.Handle(url+"/", http.StripPrefix(url, fs))
 }
